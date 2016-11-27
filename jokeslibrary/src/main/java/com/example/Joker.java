@@ -20,7 +20,7 @@ public class Joker {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
-        final String JOKES_BASE_URL = "http://api.icndb.com/jokes/random";
+        final String JOKES_BASE_URL = "http://api.icndb.com/jokes/random?limitTo=[nerdy]";
 
         try {
 

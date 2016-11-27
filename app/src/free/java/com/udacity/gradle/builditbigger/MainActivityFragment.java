@@ -7,14 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
-
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
-import com.udacity.gradle.builditbigger.R;
-
 
 /**
  * A placeholder fragment containing a simple view.
@@ -29,17 +25,14 @@ public class MainActivityFragment extends Fragment {
         interstitialAd = new InterstitialAd(getContext());
         interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
 
-        requestNewInterstitial();
-
-        Button jokeButton = (Button) getActivity().findViewById(R.id.joke_button);
-        jokeButton.setOnClickListener(new View.OnClickListener() {
+        interstitialAd.setAdListener(new AdListener() {
             @Override
-            public void onClick(View view) {
-                if (interstitialAd.isLoaded()) {
-                    interstitialAd.show();
-                }
+            public void onAdClosed() {
+                requestNewInterstitial();
             }
         });
+
+        requestNewInterstitial();
     }
 
     private void requestNewInterstitial() {
@@ -56,6 +49,17 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
+
+        Button jokeButton = (Button) root.findViewById(R.id.joke_button);
+        jokeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (interstitialAd.isLoaded()) {
+                    interstitialAd.show();
+                    ((MainActivity) getActivity()).getJokeFromServer();
+                }
+            }
+        });
 
         AdView mAdView = (AdView) root.findViewById(R.id.adView);
         // Create an ad request. Check logcat output for the hashed device ID to
